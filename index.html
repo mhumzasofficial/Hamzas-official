@@ -2195,83 +2195,314 @@ function closeModal() {
         </div>
 		
 <!-- Meet The Founder -->
-
 <style>
 .founder-section {
-  padding: 80px 24px;
-  background: #0a1128;
+  --navy-deep: #060911;
+  --navy: #0a1128;
+  --navy-card: #10182f;
+  --navy-card-2: #141d38;
+  --gold: #d4af37;
+  --gold-bright: #f2d571;
+  --gold-dim: #8a712a;
+  --ivory: #f4f1ea;
+  --parchment: #cfd6e4;
+  --burgundy: #5c1f2e;
+
+  position: relative;
+  padding: 110px 24px 100px;
+  background:
+    radial-gradient(ellipse 900px 500px at 12% 0%, rgba(212,175,55,0.07), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 90% 100%, rgba(92,31,46,0.18), transparent 60%),
+    var(--navy);
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
 }
+
+/* faint engraved rule pattern, like currency paper */
+.founder-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    115deg,
+    rgba(212,175,55,0.035) 0px,
+    rgba(212,175,55,0.035) 1px,
+    transparent 1px,
+    transparent 64px
+  );
+  pointer-events: none;
+}
+
+.founder-heading {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto 64px;
+  text-align: center;
+}
+.founder-heading .kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold);
+  font-family: 'Oswald', sans-serif;
+  font-size: 12.5px;
+  letter-spacing: 3px;
+  font-weight: 600;
+}
+.founder-heading .kicker::before,
+.founder-heading .kicker::after {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim));
+}
+.founder-heading .kicker::after { background: linear-gradient(90deg, var(--gold-dim), transparent); }
+.founder-heading h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--ivory);
+  font-size: clamp(30px, 4vw, 42px);
+  margin: 14px 0 0;
+}
+
 .founder-container {
-  max-width: 1100px;
+  position: relative;
+  max-width: 1080px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  gap: 48px;
+  align-items: stretch;
+  gap: 44px;
   flex-wrap: wrap;
 }
+
+/* ---------- shared card shell ---------- */
 .team-card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  position: relative;
   flex: 1 1 340px;
   max-width: 400px;
   text-align: center;
-  background: #10182f;
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  border-radius: 12px;
-  padding: 32px 24px;
+  background: linear-gradient(165deg, var(--navy-card-2), var(--navy-card) 60%);
+  border-radius: 4px;
+  padding: 44px 30px 34px;
+  border: 1px solid rgba(212, 175, 55, 0.16);
+  transform: perspective(1000px) rotateX(var(--tilt-y)) rotateY(var(--tilt-x));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.5s ease, box-shadow 0.5s ease;
+  will-change: transform;
+}
+
+/* corner brackets — a signet-frame motif instead of a generic card border */
+.team-card::before,
+.team-card::after,
+.team-card .corner-tl,
+.team-card .corner-br {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--gold-dim);
+  opacity: 0.7;
+  transition: width 0.45s ease, height 0.45s ease, border-color 0.45s ease, opacity 0.45s ease;
+}
+.team-card::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.team-card::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+.team-card:hover {
+  --tilt-x: 1.4deg;
+  --tilt-y: -1.1deg;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(212,175,55,0.06);
+}
+.team-card:hover::before,
+.team-card:hover::after {
+  width: 30px;
+  height: 30px;
+  border-color: var(--gold-bright);
+  opacity: 1;
+}
+
+/* founder card gets the elevated treatment — larger, gold-edged, seal badge */
+.team-card.is-founder {
+  max-width: 420px;
+  padding: 50px 34px 38px;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  background: linear-gradient(165deg, #16203f, var(--navy-card) 65%);
+}
+.team-card.is-founder::before,
+.team-card.is-founder::after {
+  border-color: var(--gold);
+}
+
+/* wax-seal style badge for the founder only — encodes rank, not decoration */
+.seal {
+  position: absolute;
+  top: -20px;
+  right: 26px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, var(--gold-dim) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--navy-deep);
+  box-shadow: 0 8px 18px -6px rgba(0,0,0,0.6);
+  transform: rotate(-6deg);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.team-card.is-founder:hover .seal { transform: rotate(2deg) scale(1.06); }
+
+/* ---------- portrait ---------- */
+.team-image {
+  position: relative;
+  width: 152px;
+  height: 152px;
+  margin: 0 auto 22px;
+}
+.team-image .ring {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-dim);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.6s ease;
 }
 .team-image img {
-  width: 160px;
-  height: 160px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid #d4af37;
-  margin-bottom: 16px;
+  display: block;
+  filter: grayscale(35%) contrast(1.05);
+  transition: filter 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.team-card:hover .team-image img {
+  filter: grayscale(0%) contrast(1.05);
+  transform: scale(1.045);
+}
+.team-card:hover .team-image .ring {
+  transform: scale(1.1);
+  border-color: var(--gold-bright);
+}
+
+/* ---------- text ---------- */
 .team-eyebrow {
-  color: #d4af37;
+  color: var(--gold);
   font-family: 'Oswald', sans-serif;
-  letter-spacing: 1.5px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  font-size: 13px;
+  font-size: 11.5px;
+  font-weight: 500;
 }
 .team-name {
-  color: #fff;
-  font-family: 'Oswald', sans-serif;
-  font-size: 24px;
-  margin: 6px 0 2px;
+  color: var(--ivory);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 28px;
+  margin: 8px 0 2px;
+  position: relative;
+  display: inline-block;
 }
+/* signature-flourish underline draws in on hover instead of a stock underline */
+.team-name::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  height: 1.5px;
+  width: 0;
+  background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+  transform: translateX(-50%);
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.team-card:hover .team-name::after { width: 78%; }
+
 .team-title {
-  color: #d4af37;
+  color: var(--gold);
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  margin-bottom: 14px;
+  font-weight: 500;
+  font-size: 13.5px;
+  letter-spacing: 0.3px;
+  margin-bottom: 16px;
+  opacity: 0.9;
 }
 .team-bio {
-  color: #cfd6e4;
+  color: var(--parchment);
   font-family: 'Poppins', sans-serif;
-  line-height: 1.65;
+  font-weight: 300;
+  line-height: 1.75;
   font-size: 14px;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
+}
+
+/* ---------- links ---------- */
+.team-links {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
 }
 .team-links a {
-  color: #d4af37;
-  font-weight: 600;
+  position: relative;
+  color: var(--parchment);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 12.5px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
   text-decoration: none;
-  margin: 0 10px;
-  font-size: 14px;
+  padding-bottom: 4px;
+  transition: color 0.35s ease;
 }
-.team-links a:hover { text-decoration: underline; }
+.team-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.team-links a:hover {
+  color: var(--gold-bright);
+}
+.team-links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
 
 @media (max-width: 720px) {
   .founder-container { flex-direction: column; align-items: center; }
+  .team-card:hover { --tilt-x: 0deg; --tilt-y: 0deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-card, .team-image img, .team-image .ring, .team-name::after, .seal, .team-links a::after {
+    transition: none !important;
+  }
 }
 </style>
 
 <section class="founder-section" id="founder">
+  <div class="founder-heading">
+    <span class="kicker">The People Behind It</span>
+   
+  </div>
+
   <div class="founder-container">
 
-    <div class="team-card">
+    <div class="team-card is-founder">
+     
       <div class="team-image">
-        <img src=assets/img/bg/hamza.jpeg alt="Engr. M. Hamza, Founder and CEO of Hamza's Official">
+        <div class="ring"></div>
+        <img src="assets/img/bg/hamza.jpeg" alt="Engr. M. Hamza, Founder and CEO of Hamza's Official">
       </div>
       <span class="team-eyebrow">Founder</span>
       <h3 class="team-name">Engr. M. Hamza</h3>
@@ -2279,19 +2510,20 @@ function closeModal() {
       <p class="team-bio">
         Founded Hamza's Official to help international entrepreneurs manage
         and scale eCommerce stores across eBay, Amazon, TikTok Shop, Etsy,
-        and Mercari — alongside dropshipping, brand design, video editing,
+        and Mercari alongside dropshipping, brand design, video editing,
         and web &amp; app development for clients across the USA, UK, Canada,
         Australia, UAE, and Pakistan.
       </p>
       <div class="team-links">
         <a href="https://www.linkedin.com/in/engr-mohammad-hamza-26283b29b" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="https://hamzasofficial.netlify.app/" target="_blank" rel="noopener noreferrer">Portfolio</a>
+        
       </div>
     </div>
 
     <div class="team-card">
       <div class="team-image">
-        <img src=assets/img/bg/Atif.jpg alt="Atif Arif, Business Development and Creative Lead at Hamza's Official">
+        <div class="ring"></div>
+        <img src="assets/img/bg/Atif.jpg" alt="Atif Arif, Business Development and Creative Lead at Hamza's Official">
       </div>
       <span class="team-eyebrow">Team</span>
       <h3 class="team-name">Atif Arif</h3>
@@ -2305,6 +2537,23 @@ function closeModal() {
 
   </div>
 </section>
+
+<script>
+// subtle 3D tilt that follows the cursor — a single, deliberate hover moment
+document.querySelectorAll('.team-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.setProperty('--tilt-x', (px * 6).toFixed(2) + 'deg');
+    card.style.setProperty('--tilt-y', (-py * 6).toFixed(2) + 'deg');
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.setProperty('--tilt-x', '0deg');
+    card.style.setProperty('--tilt-y', '0deg');
+  });
+});
+</script>
 
 
 
