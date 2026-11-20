@@ -50,6 +50,7 @@
         <meta name="geo.position" content="33.150;73.733">
         <meta name="ICBM" content="33.150, 73.733">
 		<meta name="robots" content="index, follow">
+		<link rel="preload" as="image" href="assets/img/logo.png">
 		<meta name="google-site-verification" content="5jyyO9YBHR2i0sj3R0k9CmQn_wVjW-pU5nt9U32NDgk" />
 
 		<script type="application/ld+json">
@@ -117,44 +118,52 @@
 
 
 
-<!--Pre Loader css-->
-
-		<style>
-    .preloader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #ffffff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-    }
-
-    .logo-pulse {
-        width: 180px;
-        height: auto;
-        animation: logoPulse 1.4s ease-in-out infinite;
-    }
-
-    @keyframes logoPulse {
-        0%, 100% {
-            transform: scale(0.85);
-            opacity: 0.6;
-        }
-        50% {
-            transform: scale(1.05);
-            opacity: 1;
-        }
-    }
+<!-- START PRELOADER (paste right after <body>) -->
+<style>
+  .preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    transition: opacity .25s ease, visibility .25s ease;
+  }
+  .preloader.hide { opacity: 0; visibility: hidden; }
+  .logo-pulse {
+    width: 80px;
+    height: auto;
+    animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.08); opacity: .8; }
+  }
 </style>
 
-<!-- START PRELOADER -->
-<div class="preloader">
-    <img src="assets/img/logo.png" alt="Logo" class="logo-pulse">
+<div class="preloader" id="preloader">
+  <img src="assets/img/logo.png" alt="Logo" class="logo-pulse"
+       width="80" height="80" fetchpriority="high" decoding="async">
 </div>
+
+<script>
+  (function () {
+    var p = document.getElementById('preloader');
+    var done = false;
+    function hide() {
+      if (done || !p) return;
+      done = true;
+      p.classList.add('hide');
+      setTimeout(function () { p.remove(); }, 300);
+    }
+    // Hide as soon as the HTML is ready (not waiting for all images)
+    if (document.readyState !== 'loading') hide();
+    else document.addEventListener('DOMContentLoaded', hide);
+    // Safety cap: never show longer than 1.2 seconds
+    setTimeout(hide, 1200);
+  })();
+</script>
 <!-- END PRELOADER -->
 
 
