@@ -750,6 +750,14 @@
   @media (prefers-reduced-motion: reduce) { .lia * { transition: none !important; } }
 </style>
 
+		<style>
+  .lia-grid { display: block !important; column-count: 3; column-gap: 20px; }
+  .lia-item { break-inside: avoid; margin: 0 0 20px !important; }
+  .lia-item img { width: 100% !important; height: auto !important; aspect-ratio: auto !important; object-fit: contain !important; }
+  @media (max-width: 900px) { .lia-grid { column-count: 2; } }
+  @media (max-width: 560px) { .lia-grid { column-count: 1; } }
+</style>
+
 <section class="lia" id="leadership-in-action" aria-labelledby="lia-title">
   <div class="lia-wrap">
     <header class="lia-head">
